@@ -1,3 +1,4 @@
-#CODETutorial.IO MEAN seed
+#CODETutorial.IO  Express and PassportJS Authentication 
+
 
 
