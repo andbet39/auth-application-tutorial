@@ -1,0 +1,36 @@
+<div class="row" data-ng-init="userinfo()">
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{loggeduser.firstname}} {{loggeduser.lastname}}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class=" col-md-12 col-lg-12 ">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Name:</td>
+                                    <td>{{loggeduser.firstname}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Lastname:</td>
+                                    <td> {{loggeduser.lastname}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><a href="mailto:info@support.com"> {{loggeduser.email}}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                          <button class="btn btn-danger" ng-click="logout()">Logout  </button>
+             </div>
+        </div>
+    </div>
+</div>
+
