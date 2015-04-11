@@ -38,7 +38,9 @@ app.controller('authController', function($scope,$http,$location) {
             error(function () {
                 $scope.alert = 'Login failed'
             });
-    }
+    };
+
+
 
     $scope.logout = function(){
         $http.get('/auth/logout')

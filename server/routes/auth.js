@@ -6,6 +6,7 @@ module.exports = function(app) {
     var passport = require('passport');
     var mongoose = require('mongoose');
     var LocalStrategy = require('passport-local').Strategy;
+    var FacebookStrategy = require('passport-facebook').Strategy;
 
 
     var user = require('../models/usermodel.js');
@@ -48,6 +49,40 @@ module.exports = function(app) {
 
     ));
 
+
+    passport.use(new FacebookStrategy({
+            clientID: '1598215213755624',
+            clientSecret: 'c019a55f66e96fbb30d1dc882e64406a',
+            callbackURL: "http://localhost:3000/auth/facebook/callback"
+        },function(accessToken, refreshToken, profile, done) {
+            process.nextTick(function () {
+                User.findOne({'email': profile.emails[0].value}, function (err, user) {
+                    console.log(profile);
+                    if (err) return done(err);
+                    if (user) {
+                        done(null, user);
+                    } else {
+                        var user = new User();
+                        user.username = profile.emails[0].value;
+                        user.facebook.token = accessToken;
+                        user.facebookprofileUrl = profile.profileUrl;
+                        user.facebook.email = profile.emails[0].value;
+                        user.facebook.fbid = profile.id;
+                        user.facebook.displayName = profile.displayName;
+                        user.firstname =profile.name.givenName;
+                        user.lastname=profile.name.familyName;
+
+                        user.save(function (err) {
+                            if (err) return done(err);
+                            done(null, user);
+                        });
+                    }
+                });
+            });
+        }
+    ));
+
+
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
@@ -62,6 +97,14 @@ module.exports = function(app) {
         if(req.isAuthenticated())return next();
          res.redirect('/');
     }
+
+    app.get('/auth/facebook', passport.authenticate('facebook', {scope:'email'}));
+
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', { failureRedirect: '/login.html' }),
+        function(req, res) {
+            res.redirect('/#/user');
+        });
 
 
     app.post('/auth/login', passport.authenticate('local'),function(req, res){

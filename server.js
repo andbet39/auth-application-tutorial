@@ -5,8 +5,8 @@ var mongoose      = require('mongoose');
 var app            = express();
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
-
 var httpServer = require("http").createServer(app);
+var cors = require('cors');
 
     
 // config files
@@ -18,11 +18,11 @@ var port = 3000;
 // connect to  mongoDB  
 mongoose.connect(db.url);
 
+app.use(cors());
+
 // parse application/json 
 app.use(bodyParser.json()); 
 
-// parse application/vnd.api+json as json
-app.use(bodyParser.json({ type: 'application/vnd.api+json' })); 
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -32,6 +32,8 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 //set the public folder of the app
 app.use(express.static(__dirname + '/public'));
+
+
 
 //load basic route for server
 require('./server/routes/basic')(app);
